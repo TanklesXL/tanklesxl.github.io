@@ -1,6 +1,6 @@
 import gleam/list
 import lustre/attribute.{attribute}
-import lustre/element.{Element}
+import lustre/element.{type Element}
 import lustre/element/html
 
 pub type Content {
@@ -27,7 +27,12 @@ pub fn view(content: Content) -> Element(msg) {
     Snippet(lang, code) ->
       html.pre(
         [attribute("data-lang", lang)],
-        [html.code([], [element.text(code)])],
+        [
+          html.code(
+            [attribute.class("language-" <> lang)],
+            [element.text(code)],
+          ),
+        ],
       )
   }
 }

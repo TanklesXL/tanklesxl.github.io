@@ -2,10 +2,10 @@
 
 import gleam/list
 import lustre/attribute.{attribute}
-import lustre/element.{Element}
+import lustre/element.{type Element}
 import lustre/element/html.{html}
 import lustre/ssg
-import content.{Content}
+import content.{type Content}
 import content/index
 
 // MAIN ------------------------------------------------------------------------
@@ -44,6 +44,30 @@ fn page(content: List(Content), title: String) -> Element(msg) {
               }
             ",
           ),
+          html.link([
+            attribute.rel("stylesheet"),
+            attribute.href(
+              "https://unpkg.com/nord-highlightjs@0.1.0/dist/nord.css",
+            ),
+            attribute.type_("text/css"),
+          ]),
+          html.script(
+            [
+              attribute.src(
+                "https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js",
+              ),
+            ],
+            "",
+          ),
+          html.script(
+            [
+              attribute.src(
+                "https://cdn.jsdelivr.net/gh/gleam-lang/website@main/javascript/highlightjs-gleam.min.js",
+              ),
+            ],
+            "",
+          ),
+          html.script([], "hljs.highlightAll();"),
         ],
       ),
       html.body([], [html.div([], list.map(content, content.view))]),
