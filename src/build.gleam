@@ -1,78 +1,44 @@
 // IMPORTS ---------------------------------------------------------------------
 
 import gleam/list
-import lustre/attribute.{attribute}
-import lustre/element.{type Element}
-import lustre/element/html.{html}
+import gleam/map
 import lustre/ssg
-import content.{type Content}
+import content
 import content/index
+import content/posts
+import post
+import static
+
+const output_dir = "./dist"
 
 // MAIN ------------------------------------------------------------------------
 
 pub fn main() {
-  ssg.new("./dist")
-  |> ssg.add_static_route("/", page(index.content, "Home"))
-  |> ssg.add_static_dir("./static")
+  // get the filenames of all posts
+  let assert Ok(posts_files) = static.posts()
+
+  let assert Ok(posts) = list.try_map(posts_files, post.post)
+
+  // create a function that generates the link value for posts
+  let post_to_link = post.link("/posts/", _)
+
+  // generate the index given the list of posts
+  let index_page = index.page(posts, post_to_link)
+
+  // generate the posts page
+  let posts_page = posts.page(posts, post_to_link)
+
+  // generate the dynamic route for the post pages
+  let post_pages =
+    posts
+    |> list.map(post.dynamic_route)
+    |> map.from_list
+
+  ssg.new(output_dir)
+  |> static.add_static_dir
+  |> ssg.add_static_route("/", content.page(index_page))
+  |> ssg.add_static_route("/posts", content.page(posts_page))
+  |> ssg.add_dynamic_route("/posts", post_pages, content.page)
   |> ssg.use_index_routes
   |> ssg.build
-}
-
-fn page(content: List(Content), title: String) -> Element(msg) {
-  html(
-    [attribute("lang", "en"), attribute.class("overflow-x-hidden")],
-    [
-      html.head(
-        [],
-        [
-          html.title([], title),
-          html.meta([attribute("charset", "utf-8")]),
-          html.meta([
-            attribute("name", "viewport"),
-            attribute("content", "width=device-width, initial-scale=1"),
-          ]),
-          html.link([
-            attribute.href(
-              "https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css",
-            ),
-            attribute.rel("stylesheet"),
-          ]),
-          html.style(
-            [],
-            " body > div {
-                max-width: 60ch;
-                margin: 0 auto;
-                padding-top: 2rem;
-              }
-            ",
-          ),
-          html.link([
-            attribute.rel("stylesheet"),
-            attribute.href(
-              "https://unpkg.com/nord-highlightjs@0.1.0/dist/nord.css",
-            ),
-            attribute.type_("text/css"),
-          ]),
-          html.script(
-            [
-              attribute.src(
-                "https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js",
-              ),
-            ],
-            "",
-          ),
-          html.script(
-            [
-              attribute.src(
-                "https://cdn.jsdelivr.net/gh/gleam-lang/website@main/javascript/highlightjs-gleam.min.js",
-              ),
-            ],
-            "",
-          ),
-          html.script([], "hljs.highlightAll();"),
-        ],
-      ),
-      html.body([], [html.div([], list.map(content, content.view))]),
-    ],
-  )
 }
