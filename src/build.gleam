@@ -32,7 +32,9 @@ fn page(content: List(Content), title: String) -> Element(msg) {
             attribute("content", "width=device-width, initial-scale=1"),
           ]),
           html.link([
-            attribute.href("/pico.min.css"),
+            attribute.href(
+              "https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css",
+            ),
             attribute.rel("stylesheet"),
           ]),
           html.style(
