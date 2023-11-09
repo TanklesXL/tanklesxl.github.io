@@ -21,9 +21,12 @@ pub type Content {
   Title(String)
   Heading(String)
   Subheading(String)
-  Section(List(InlineContent))
+  Section(Content)
+  P(List(InlineContent))
   Snippet(lang: String, code: String)
   StaticMarkdown(src: String)
+  List(List(Content))
+  Grid(List(Content))
 }
 
 pub type InlineContent {
@@ -37,12 +40,17 @@ fn static_md_block(attrs: List(Attribute(msg))) -> Element(msg) {
   element.element("md-block", attrs, [])
 }
 
-pub fn content(content: Content) -> Element(msg) {
+pub fn render_content(content: Content) -> Element(msg) {
   case content {
     Title(text) -> html.h1([], [element.text(text)])
     Heading(text) -> html.h2([], [element.text(text)])
     Subheading(text) -> html.h3([], [element.text(text)])
-    Section(content) -> html.p([], list.map(content, inline_content))
+    P(content) ->
+      html.p(
+        [],
+        list.map(content, inline_content)
+        |> list.intersperse(html.br([])),
+      )
     Snippet(lang, code) ->
       html.pre(
         [attribute("data-lang", lang)],
@@ -54,6 +62,14 @@ pub fn content(content: Content) -> Element(msg) {
         ],
       )
     StaticMarkdown(src: src) -> static_md_block([attribute.src(src)])
+    Grid(inner) ->
+      html.div([attribute.class("grid")], list.map(inner, render_content))
+    List(inner) ->
+      html.ul(
+        [],
+        list.map(inner, fn(elem) { html.li([], [render_content(elem)]) }),
+      )
+    Section(content) -> html.section([], [render_content(content)])
   }
 }
 
@@ -66,7 +82,7 @@ fn inline_content(content: InlineContent) -> Element(msg) {
   }
 }
 
-pub fn page(page: Page) -> Element(msg) {
+pub fn render_page(page: Page) -> Element(msg) {
   html(
     [attribute("lang", "en"), attribute.class("overflow-x-hidden")],
     [
@@ -127,7 +143,36 @@ pub fn page(page: Page) -> Element(msg) {
           ),
         ],
       ),
-      html.body([], [html.div([], list.map(page.content, content))]),
+      html.body(
+        [],
+        [
+          html.header(
+            [attribute.class("container")],
+            [
+              html.nav(
+                [],
+                [
+                  html.ul(
+                    [],
+                    [
+                      html.li([], [inline_content(home)]),
+                      html.li([], [inline_content(posts)]),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+          html.main(
+            [attribute.class("container")],
+            list.map(page.content, render_content),
+          ),
+        ],
+      ),
     ],
   )
 }
+
+const home = Link(text: "home", href: "/")
+
+const posts = Link(text: "posts", href: "/posts")

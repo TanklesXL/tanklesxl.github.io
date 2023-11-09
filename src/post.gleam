@@ -5,6 +5,8 @@ import content.{
 import gleam/result
 import gleam/string
 
+const post_path = "/posts/"
+
 pub fn post(filename: String) -> Result(Post, Err) {
   use #(title, _) <- result.map(
     filename
@@ -13,11 +15,18 @@ pub fn post(filename: String) -> Result(Post, Err) {
       "failed to remove .md suffix from '" <> filename <> "'",
     )),
   )
-  Post(path: title, title: title, src: "/posts/" <> filename)
+  Post(
+    path: title,
+    title: title
+    |> string.replace("_", " ")
+    |> string.replace("-", " ")
+    |> string.capitalise,
+    src: post_path <> filename,
+  )
 }
 
-pub fn link(prefix: String, post: Post) -> InlineContent {
-  Link(href: prefix <> post.path, text: post.title)
+pub fn link(post: Post) -> InlineContent {
+  Link(href: post_path <> post.path, text: post.title)
 }
 
 pub fn dynamic_route(post: Post) -> #(String, Page) {

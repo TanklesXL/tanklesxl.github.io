@@ -19,14 +19,11 @@ pub fn main() {
 
   let assert Ok(posts) = list.try_map(posts_files, post.post)
 
-  // create a function that generates the link value for posts
-  let post_to_link = post.link("/posts/", _)
-
   // generate the index given the list of posts
-  let index_page = index.page(posts, post_to_link)
+  let index_page = index.page(posts, post.link)
 
   // generate the posts page
-  let posts_page = posts.page(posts, post_to_link)
+  let posts_page = posts.page(posts, post.link)
 
   // generate the dynamic route for the post pages
   let post_pages =
@@ -36,9 +33,9 @@ pub fn main() {
 
   ssg.new(output_dir)
   |> static.add_static_dir
-  |> ssg.add_static_route("/", content.page(index_page))
-  |> ssg.add_static_route("/posts", content.page(posts_page))
-  |> ssg.add_dynamic_route("/posts", post_pages, content.page)
+  |> ssg.add_static_route("/", content.render_page(index_page))
+  |> ssg.add_static_route("/posts", content.render_page(posts_page))
+  |> ssg.add_dynamic_route("/posts", post_pages, content.render_page)
   |> ssg.use_index_routes
   |> ssg.build
 }
