@@ -101,44 +101,30 @@ pub fn render_page(page: Page) -> Element(msg) {
             ),
             attribute.rel("stylesheet"),
           ]),
-          html.style(
-            [],
-            " body > div {
-                max-width: 60ch;
-                margin: 0 auto;
-                padding-top: 2rem;
-              }
-            ",
+          html.script(
+            [
+              attribute.type_("module"),
+              attribute.src("https://md-block.verou.me/md-block.js"),
+            ],
+            "",
           ),
           html.link([
             attribute.rel("stylesheet"),
             attribute.href(
-              "https://unpkg.com/nord-highlightjs@0.1.0/dist/nord.css",
+              "https://unpkg.com/prismjs@0.0.1/themes/prism-coy.css",
             ),
             attribute.type_("text/css"),
           ]),
           html.script(
             [
               attribute.src(
-                "https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js",
+                "https://unpkg.com/prismjs@1.29.0/components/prism-core.min.js",
               ),
             ],
             "",
           ),
           html.script(
-            [
-              attribute.src(
-                "https://cdn.jsdelivr.net/gh/gleam-lang/website@main/javascript/highlightjs-gleam.min.js",
-              ),
-            ],
-            "",
-          ),
-          html.script([], "hljs.highlightAll();"),
-          html.script(
-            [
-              attribute.type_("module"),
-              attribute.src("https://md-block.verou.me/md-block.js"),
-            ],
+            [attribute.src("https://unpkg.com/prismjs-gleam@1/gleam.js")],
             "",
           ),
         ],
