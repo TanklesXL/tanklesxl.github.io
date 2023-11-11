@@ -3,6 +3,10 @@ import lustre/attribute.{type Attribute, attribute}
 import lustre/element.{type Element}
 import lustre/element/html.{html}
 import simplifile
+import lustre/ui/stack
+import lustre/ui/styles
+import lustre/ui/sequence.{sequence}
+import lustre/ui
 
 pub type Err {
   FileError(simplifile.FileError)
@@ -22,17 +26,17 @@ pub type Content {
   Heading(String)
   Subheading(String)
   Section(Content)
-  P(List(InlineContent))
+  Paragraph(List(InlineContent))
   Snippet(lang: String, code: String)
   StaticMarkdown(src: String)
   List(List(Content))
   Grid(List(Content))
+  Link(href: String, text: String)
 }
 
 pub type InlineContent {
   Bold(String)
   Code(String)
-  Link(href: String, text: String)
   Text(String)
 }
 
@@ -45,10 +49,11 @@ pub fn render_content(content: Content) -> Element(msg) {
     Title(text) -> html.h1([], [element.text(text)])
     Heading(text) -> html.h2([], [element.text(text)])
     Subheading(text) -> html.h3([], [element.text(text)])
-    P(content) ->
+    Link(href, text) -> html.a([attribute("href", href)], [element.text(text)])
+    Paragraph(content) ->
       html.p(
         [],
-        list.map(content, inline_content)
+        list.map(content, render_inline_content)
         |> list.intersperse(html.br([])),
       )
     Snippet(lang, code) ->
@@ -63,21 +68,22 @@ pub fn render_content(content: Content) -> Element(msg) {
       )
     StaticMarkdown(src: src) -> static_md_block([attribute.src(src)])
     Grid(inner) ->
-      html.div([attribute.class("grid")], list.map(inner, render_content))
+      sequence([attribute.class("grid")], list.map(inner, render_content))
     List(inner) ->
-      html.ul(
+      stack.of(
+        html.ul,
         [],
         list.map(inner, fn(elem) { html.li([], [render_content(elem)]) }),
       )
+
     Section(content) -> html.section([], [render_content(content)])
   }
 }
 
-fn inline_content(content: InlineContent) -> Element(msg) {
+fn render_inline_content(content: InlineContent) -> Element(msg) {
   case content {
     Bold(text) -> html.strong([], [element.text(text)])
     Code(text) -> html.code([], [element.text(text)])
-    Link(href, text) -> html.a([attribute("href", href)], [element.text(text)])
     Text(text) -> element.text(text)
   }
 }
@@ -127,6 +133,7 @@ pub fn render_page(page: Page) -> Element(msg) {
             [attribute.src("https://unpkg.com/prismjs-gleam@1/gleam.js")],
             "",
           ),
+          styles.theme(ui.base()),
         ],
       ),
       html.body(
@@ -135,14 +142,16 @@ pub fn render_page(page: Page) -> Element(msg) {
           html.header(
             [attribute.class("container")],
             [
-              html.nav(
+              stack.of(
+                html.nav,
                 [],
                 [
-                  html.ul(
+                  stack.of(
+                    html.ul,
                     [],
                     [
-                      html.li([], [inline_content(home)]),
-                      html.li([], [inline_content(posts)]),
+                      html.li([], [render_content(home)]),
+                      html.li([], [render_content(posts)]),
                     ],
                   ),
                 ],

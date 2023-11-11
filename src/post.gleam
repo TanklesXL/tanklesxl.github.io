@@ -1,6 +1,6 @@
 import content.{
-  type Err, type InlineContent, type Page, type Post, Link, Page, Post,
-  StaticMarkdown, StringError,
+  type Content, type Err, type Page, type Post, Link, Page, Post, StaticMarkdown,
+  StringError,
 }
 import gleam/result
 import gleam/string
@@ -25,7 +25,7 @@ pub fn post(filename: String) -> Result(Post, Err) {
   )
 }
 
-pub fn link(post: Post) -> InlineContent {
+pub fn link(post: Post) -> Content {
   Link(href: post_path <> post.path, text: post.title)
 }
 

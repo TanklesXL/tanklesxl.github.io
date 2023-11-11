@@ -1,16 +1,17 @@
 import content.{
-  type InlineContent, type Page, type Post, Bold, Code, Heading, List, P, Page,
-  Post, Section, Snippet, Subheading, Text, Title,
+  type Page, type Post, Bold, Code, Heading, List, Page, Paragraph, Post,
+  Section, Snippet, Subheading, Text, Title,
 }
 import gleam/list
+import post
 
-pub fn page(posts: List(Post), f: fn(Post) -> InlineContent) -> Page {
+pub fn page(posts: List(Post)) -> Page {
   Page(
     title: "Home",
     content: [
       Title("Hello, world!"),
-      P([Text("Here are all the posts!")]),
-      Section(List(list.map(posts, fn(p) { P([f(p)]) }))),
+      Paragraph([Text("Here are all the posts!")]),
+      Section(List(list.map(posts, post.link))),
       Heading("We can write code snippets..."),
       Snippet(
         "gleam",
@@ -21,7 +22,7 @@ pub fn main() {
 }",
       ),
       Subheading("...and even format text!"),
-      P([
+      Paragraph([
         Text("This is some text. "),
         Bold("This is bold. "),
         Text("This text has some "),

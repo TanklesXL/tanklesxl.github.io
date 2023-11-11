@@ -20,10 +20,10 @@ pub fn main() {
   let assert Ok(posts) = list.try_map(posts_files, post.post)
 
   // generate the index given the list of posts
-  let index_page = index.page(posts, post.link)
+  let index_page = index.page(posts)
 
   // generate the posts page
-  let posts_page = posts.page(posts, post.link)
+  let posts_page = posts.page(posts)
 
   // generate the dynamic route for the post pages
   let post_pages =
