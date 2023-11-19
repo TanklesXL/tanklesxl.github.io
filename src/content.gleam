@@ -25,7 +25,7 @@ pub type Content {
   Title(String)
   Heading(String)
   Subheading(String)
-  Section(Content)
+  Section(List(Content))
   Paragraph(List(InlineContent))
   Snippet(lang: String, code: String)
   StaticMarkdown(src: String)
@@ -76,7 +76,7 @@ pub fn render_content(content: Content) -> Element(msg) {
         list.map(inner, fn(elem) { html.li([], [render_content(elem)]) }),
       )
 
-    Section(content) -> html.section([], [render_content(content)])
+    Section(content) -> html.section([], list.map(content, render_content))
   }
 }
 
@@ -119,7 +119,6 @@ pub fn render_page(page: Page) -> Element(msg) {
             attribute.href(
               "https://unpkg.com/prismjs@0.0.1/themes/prism-coy.css",
             ),
-            attribute.type_("text/css"),
           ]),
           html.script(
             [

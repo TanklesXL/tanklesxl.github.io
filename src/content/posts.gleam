@@ -5,6 +5,6 @@ import post
 pub fn page(posts: List(Post)) -> Page {
   Page(
     title: "Links to posts",
-    content: [Section(List(list.map(posts, post.link)))],
+    content: [Section([List(list.map(posts, post.link))])],
   )
 }
