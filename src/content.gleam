@@ -57,24 +57,16 @@ pub fn render_content(content: Content) -> Element(msg) {
         |> list.intersperse(html.br([])),
       )
     Snippet(lang, code) ->
-      html.pre(
-        [attribute("data-lang", lang)],
-        [
-          html.code(
-            [attribute.class("language-" <> lang)],
-            [element.text(code)],
-          ),
-        ],
-      )
+      html.pre([attribute("data-lang", lang)], [
+        html.code([attribute.class("language-" <> lang)], [element.text(code)]),
+      ])
     StaticMarkdown(src: src) -> static_md_block([attribute.src(src)])
     Grid(inner) ->
       sequence([attribute.class("grid")], list.map(inner, render_content))
     List(inner) ->
-      stack.of(
-        html.ul,
-        [],
-        list.map(inner, fn(elem) { html.li([], [render_content(elem)]) }),
-      )
+      stack.of(html.ul, [], list.map(inner, fn(elem) {
+        html.li([], [render_content(elem)])
+      }))
 
     Section(content) -> html.section([], list.map(content, render_content))
   }
@@ -89,82 +81,42 @@ fn render_inline_content(content: InlineContent) -> Element(msg) {
 }
 
 pub fn render_page(page: Page) -> Element(msg) {
-  html(
-    [attribute("lang", "en"), attribute.class("overflow-x-hidden")],
-    [
-      html.head(
-        [],
+  html([attribute("lang", "en"), attribute.class("overflow-x-hidden")], [
+    html.head([], [
+      html.title([], page.title),
+      html.meta([attribute("charset", "utf-8")]),
+      html.meta([
+        attribute("name", "viewport"),
+        attribute("content", "width=device-width, initial-scale=1"),
+      ]),
+      html.link([attribute.href("/pico.min.css"), attribute.rel("stylesheet")]),
+      html.link([attribute.href("/prism-nord.css"), attribute.rel("stylesheet")]),
+      html.script([attribute.src("/prism-core.min.js")], ""),
+      html.script([attribute.src("/prism-gleam.js")], ""),
+      html.script(
         [
-          html.title([], page.title),
-          html.meta([attribute("charset", "utf-8")]),
-          html.meta([
-            attribute("name", "viewport"),
-            attribute("content", "width=device-width, initial-scale=1"),
-          ]),
-          html.link([
-            attribute.href(
-              "https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css",
-            ),
-            attribute.rel("stylesheet"),
-          ]),
-          html.script(
-            [
-              attribute.type_("module"),
-              attribute.src("https://md-block.verou.me/md-block.js"),
-            ],
-            "",
-          ),
-          html.link([
-            attribute.rel("stylesheet"),
-            attribute.href(
-              "https://unpkg.com/prismjs@0.0.1/themes/prism-coy.css",
-            ),
-          ]),
-          html.script(
-            [
-              attribute.src(
-                "https://unpkg.com/prismjs@1.29.0/components/prism-core.min.js",
-              ),
-            ],
-            "",
-          ),
-          html.script(
-            [attribute.src("https://unpkg.com/prismjs-gleam@1/gleam.js")],
-            "",
-          ),
-          styles.theme(ui.base()),
+          attribute.type_("module"),
+          attribute.src("https://md-block.verou.me/md-block.js"),
         ],
+        "",
       ),
-      html.body(
-        [],
-        [
-          html.header(
-            [attribute.class("container")],
-            [
-              stack.of(
-                html.nav,
-                [],
-                [
-                  stack.of(
-                    html.ul,
-                    [],
-                    [
-                      html.li([], [render_content(home)]),
-                      html.li([], [render_content(posts)]),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-          html.main(
-            [attribute.class("container")],
-            list.map(page.content, render_content),
-          ),
-        ],
+      styles.theme(ui.base()),
+    ]),
+    html.body([], [
+      html.header([attribute.class("container")], [
+        stack.of(html.nav, [], [
+          stack.of(html.ul, [], [
+            html.li([], [render_content(home)]),
+            html.li([], [render_content(posts)]),
+          ]),
+        ]),
+      ]),
+      html.main(
+        [attribute.class("container")],
+        list.map(page.content, render_content),
       ),
-    ],
-  )
+    ]),
+  ])
 }
 
 const home = Link(text: "home", href: "/")
