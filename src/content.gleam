@@ -4,7 +4,6 @@ import lustre/element.{type Element}
 import lustre/element/html.{html}
 import simplifile
 import lustre/ui/stack
-import lustre/ui/styles
 import lustre/ui/sequence.{sequence}
 
 pub type Err {
@@ -101,7 +100,6 @@ pub fn render_page(page: Page) -> Element(msg) {
         ],
         "",
       ),
-      styles.elements(),
     ]),
     html.body([], [
       html.header([attribute.class("container")], [
