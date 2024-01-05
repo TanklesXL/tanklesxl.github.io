@@ -64,9 +64,11 @@ pub fn render_content(content: Content) -> Element(msg) {
     Grid(inner) ->
       sequence([attribute.class("grid")], list.map(inner, render_content))
     List(inner) ->
-      stack.of(html.ul, [], list.map(inner, fn(elem) {
-        html.li([], [render_content(elem)])
-      }))
+      stack.of(
+        html.ul,
+        [],
+        list.map(inner, fn(elem) { html.li([], [render_content(elem)]) }),
+      )
 
     Section(content) -> html.section([], list.map(content, render_content))
   }
