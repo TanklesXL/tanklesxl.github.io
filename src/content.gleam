@@ -6,7 +6,6 @@ import simplifile
 import lustre/ui/stack
 import lustre/ui/styles
 import lustre/ui/sequence.{sequence}
-import lustre/ui
 
 pub type Err {
   FileError(simplifile.FileError)
@@ -102,7 +101,7 @@ pub fn render_page(page: Page) -> Element(msg) {
         ],
         "",
       ),
-      styles.theme(ui.base()),
+      styles.elements(),
     ]),
     html.body([], [
       html.header([attribute.class("container")], [

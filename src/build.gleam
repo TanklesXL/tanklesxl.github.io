@@ -1,7 +1,7 @@
 // IMPORTS ---------------------------------------------------------------------
 
 import gleam/list
-import gleam/map
+import gleam/dict as map
 import lustre/ssg
 import content
 import content/index

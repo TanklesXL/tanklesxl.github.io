@@ -11,11 +11,11 @@ gleam = ">= 0.32.0"
 # links = [{ title = "Website", href = "https://gleam.run" }]
 
 [dependencies]
-gleam_stdlib = "~> 0.31"
+gleam_stdlib = "~> 0.34"
 lustre = "~> 3.0"
 lustre_ssg = "~> 0.2"
-simplifile = "~> 0.1"
-lustre_ui = "~> 0.1"
+simplifile = "~> 1.0"
+lustre_ui = "~> 0.2"
 
 [dev-dependencies]
-gleeunit = "~> 0.10"
+gleeunit = "~> 1.0"

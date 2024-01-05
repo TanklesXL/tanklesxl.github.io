@@ -12,6 +12,6 @@ const static_dir = "./static"
 const posts_dir = "./static/posts"
 
 pub fn posts() -> Result(List(String), content.Err) {
-  simplifile.list_contents(posts_dir)
+  simplifile.get_files(posts_dir)
   |> result.map_error(FileError)
 }
