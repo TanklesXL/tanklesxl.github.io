@@ -12,19 +12,16 @@ pub fn post(filename: String) -> Result(Post, Err) {
     filename
     |> string.split_once(".md")
     |> result.replace_error(StringError(
-      "failed to remove .md suffix from '"
-      <> filename
-      <> "'",
+      "failed to remove .md suffix from '" <> filename <> "'",
     )),
   )
   Post(
     path: title,
     title: title
-    |> string.replace("_", " ")
-    |> string.replace("-", " ")
-    |> string.capitalise,
-    src: post_path
-    <> filename,
+      |> string.replace("_", " ")
+      |> string.replace("-", " ")
+      |> string.capitalise,
+    src: post_path <> filename,
   )
 }
 

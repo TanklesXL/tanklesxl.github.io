@@ -6,11 +6,15 @@ inputs:
   gleam-version:
     description: gleam version
     required: false
-    default: 0.33.0
+    default: "1.0.0"
   erlang-version:
     description: erlang-otp version
     required: false
-    default: 26.1.2
+    default: "26"
+  rebar3-version:
+    description: rebar3 version
+    required: false
+    default: "3"
   module-name:
     description: the path of the gleam module to run
     required: false
@@ -28,6 +32,7 @@ runs:
       with:
         otp-version: ${{ inputs.erlang-version }}
         gleam-version: ${{ inputs.gleam-version }}
+        rebar3-version: ${{ inputs.rebar3-version }}
     - name: build assets
       run: gleam run -m ${{ inputs.module-name }}
       shell: bash

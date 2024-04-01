@@ -3,8 +3,8 @@ import lustre/attribute.{type Attribute, attribute}
 import lustre/element.{type Element}
 import lustre/element/html.{html}
 import simplifile
-import lustre/ui/stack
-import lustre/ui/sequence.{sequence}
+import lustre/ui/layout/stack
+import lustre/ui/layout/sequence.{sequence}
 
 pub type Err {
   FileError(simplifile.FileError)
@@ -15,6 +15,8 @@ pub type Post {
   Post(path: String, title: String, src: String)
 }
 
+/// Abstraction of a web page
+///
 pub type Page {
   Page(title: String, content: List(Content))
 }
@@ -52,7 +54,7 @@ pub fn render_content(content: Content) -> Element(msg) {
       html.p(
         [],
         list.map(content, render_inline_content)
-        |> list.intersperse(html.br([])),
+          |> list.intersperse(html.br([])),
       )
     Snippet(lang, code) ->
       html.pre([attribute("data-lang", lang)], [
