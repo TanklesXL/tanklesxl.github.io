@@ -2,9 +2,9 @@ import gleam/list
 import lustre/attribute.{type Attribute, attribute}
 import lustre/element.{type Element}
 import lustre/element/html.{html}
-import simplifile
-import lustre/ui/layout/stack
 import lustre/ui/layout/sequence.{sequence}
+import lustre/ui/layout/stack
+import simplifile
 
 pub type Err {
   FileError(simplifile.FileError)

@@ -1,9 +1,9 @@
+import content.{FileError, StringError}
+import gleam/list
+import gleam/result
+import gleam/string
 import lustre/ssg
 import simplifile
-import gleam/result
-import gleam/list
-import gleam/string
-import content.{FileError, StringError}
 
 pub fn add_static_dir(config: ssg.Config(_, ssg.NoStaticDir, _)) {
   ssg.add_static_dir(config, static_dir)

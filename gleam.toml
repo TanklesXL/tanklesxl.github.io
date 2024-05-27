@@ -1,6 +1,6 @@
 name = "github_pages"
 version = "0.1.0"
-gleam = "1.0.0"
+gleam = "~>1.0"
 
 # Fill out these fields if you intend to generate HTML documentation or publish
 # your project to the Hex package manager.
@@ -13,7 +13,7 @@ gleam = "1.0.0"
 [dependencies]
 gleam_stdlib = "~> 0.36 or ~>1.0"
 lustre = "~> 4.0"
-lustre_ssg = "~> 0.2"
+lustre_ssg = "~> 0.7"
 simplifile = "~> 1.0"
 lustre_ui = "~> 0.6"
 

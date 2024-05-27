@@ -6,11 +6,11 @@ inputs:
   gleam-version:
     description: gleam version
     required: false
-    default: "1.0.0"
+    default: "1"
   erlang-version:
     description: erlang-otp version
     required: false
-    default: "26"
+    default: "27"
   rebar3-version:
     description: rebar3 version
     required: false

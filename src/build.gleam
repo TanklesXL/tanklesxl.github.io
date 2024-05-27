@@ -1,11 +1,11 @@
 // IMPORTS ---------------------------------------------------------------------
 
-import gleam/list
-import gleam/dict as map
-import lustre/ssg
 import content
 import content/index
 import content/posts
+import gleam/dict as map
+import gleam/list
+import lustre/ssg
 import post
 import static
 
