@@ -2,8 +2,6 @@ import content.{
   type Page, type Post, Bold, Code, Heading, Link, List, Page, Paragraph,
   Section, Snippet, Subheading, Text, Title,
 }
-import gleam/list
-import post
 
 pub fn page() -> Page {
   Page(title: "gleam", content: [
