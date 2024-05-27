@@ -1,6 +1,7 @@
 // IMPORTS ---------------------------------------------------------------------
 
 import content
+import content/gleam
 import content/index
 import content/posts
 import gleam/dict as map
@@ -27,7 +28,7 @@ pub fn main() {
   io.println("Creating index...")
   let index_page = index.page(posts)
 
-  // generate the posts page  
+  // generate the posts page
   io.println("Creating posts listing page...")
   let posts_page = posts.page(posts)
 
@@ -45,6 +46,7 @@ pub fn main() {
     |> ssg.add_static_route("/", content.render_page(index_page))
     |> ssg.add_static_route("/posts", content.render_page(posts_page))
     |> ssg.add_dynamic_route("/posts", post_pages, content.render_page)
+    |> ssg.add_static_route("/gleam", content.render_page(gleam.page()))
     |> ssg.use_index_routes
     |> ssg.build
 }

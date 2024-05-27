@@ -109,6 +109,7 @@ pub fn render_page(page: Page) -> Element(msg) {
           stack.of(html.ul, [], [
             html.li([], [render_content(home)]),
             html.li([], [render_content(posts)]),
+            html.li([], [render_content(gleam)]),
           ]),
         ]),
       ]),
@@ -123,3 +124,5 @@ pub fn render_page(page: Page) -> Element(msg) {
 const home = Link(text: "home", href: "/")
 
 const posts = Link(text: "posts", href: "/posts")
+
+const gleam = Link(text: "gleam", href: "/gleam")
