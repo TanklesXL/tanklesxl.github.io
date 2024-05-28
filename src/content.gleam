@@ -32,6 +32,7 @@ pub type Content {
   List(List(Content))
   Grid(List(Content))
   Link(href: String, text: String)
+  Embed(type_: String, src: String)
 }
 
 pub type InlineContent {
@@ -71,6 +72,8 @@ pub fn render_content(content: Content) -> Element(msg) {
       )
 
     Section(content) -> html.section([], list.map(content, render_content))
+    Embed(type_, src) ->
+      html.embed([attribute("type", type_), attribute("src", src)])
   }
 }
 
@@ -110,6 +113,7 @@ pub fn render_page(page: Page) -> Element(msg) {
             html.li([], [render_content(home)]),
             html.li([], [render_content(posts)]),
             html.li([], [render_content(gleam)]),
+            html.li([], [render_content(resume)]),
           ]),
         ]),
       ]),
@@ -123,6 +127,8 @@ pub fn render_page(page: Page) -> Element(msg) {
 
 const home = Link(text: "home", href: "/")
 
-const posts = Link(text: "posts", href: "/posts")
+const posts = Link(text: "blog", href: "/posts")
 
 const gleam = Link(text: "gleam", href: "/gleam")
+
+const resume = Link(text: "cv", href: "/robert_attard_cv.pdf")

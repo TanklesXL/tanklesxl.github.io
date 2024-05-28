@@ -1,9 +1,9 @@
 // IMPORTS ---------------------------------------------------------------------
 
 import content
+import content/blog
 import content/gleam
 import content/index
-import content/posts
 import gleam/dict as map
 import gleam/list
 import lustre/ssg
@@ -30,7 +30,7 @@ pub fn main() {
 
   // generate the posts page
   io.println("Creating posts listing page...")
-  let posts_page = posts.page(posts)
+  let posts_page = blog.page(posts)
 
   // generate the dynamic route for the post pages
   io.println("Generating dynamic routes...")

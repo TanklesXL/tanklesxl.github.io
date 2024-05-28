@@ -1,7 +1,4 @@
-import content.{
-  type Page, type Post, Bold, Code, Heading, Link, List, Page, Paragraph,
-  Section, Snippet, Subheading, Text, Title,
-}
+import content.{type Page, Link, List, Page, Subheading, Title}
 
 pub fn page() -> Page {
   Page(title: "gleam", content: [
